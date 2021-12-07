@@ -34,11 +34,11 @@ public class ClientThread extends Thread{
                     System.out.println("[-] Error: Client disconnected");
                 }
 
-                pw.close();
-                socket.close();
+                //pw.close();
+                //socket.close();
             }
             catch (IOException e){
-                System.out.println(e);
+                System.out.println(e + "lel");
             }
 
 
