@@ -1,3 +1,5 @@
+package TestPackage;
+
 import BootCampFiles.EmailManager;
 
 public class testerFile {
