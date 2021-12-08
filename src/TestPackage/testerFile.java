@@ -1,16 +1,34 @@
 package TestPackage;
 
-import BootCampFiles.EmailManager;
+//import BootCampFiles.EmailManager;
+import Client.Client;
+
+import java.io.IOException;
 
 public class testerFile {
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
 
+        //EmailManager emailManager = new EmailManager("aosornio@callutheran.edu", "<<password>>");
+        //emailManager.sendEmail("aosornio@callutheran.edu","TestEmail2", "LeContents");
 
-        EmailManager emailManager = new EmailManager("aosornio@callutheran.edu", "<<password>>");
+        Client client = new Client();
 
-        emailManager.sendEmail("aosornio@callutheran.edu","TestEmail2", "LeContents");
+        try{
+            client.connectToServer();
 
+            String dataFromServer = client.fetchDataFromServer();
+            System.out.println(dataFromServer);
+
+            client.sendStringToServer("reinhart");
+            client.sendStringToServer("1234");
+
+            dataFromServer = client.fetchDataFromServer();
+            System.out.println(dataFromServer);
+        }
+        catch (java.net.SocketException e){
+            System.out.println("[-] Could not connect to server");
+        }
     }
 }
