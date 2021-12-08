@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.net.Socket;
 
 public class Client {
@@ -15,7 +14,7 @@ public class Client {
     private boolean connectedToServer;
     private Socket socket;
     private BufferedReader br;
-    PrintWriter out;
+    PrintWriter printWriterOut;
 
     // Default constructor for testing on local host
     public Client(){
@@ -30,7 +29,7 @@ public class Client {
         connectedToServer = false;
     }
 
-    public void connectToServer() throws IOException, java.net.ConnectException {
+    public void connectToServer() throws IOException {
         try{
             // Connect to server using Socket obj
             System.out.println("Creating socket to '" + ip + "' on port " + portNumber);
@@ -42,43 +41,33 @@ public class Client {
 
             // Create PrintWriter from socket to send data to the server
             // PrintWriter sends data to the server using the socket's output stream and flushes the buffer
-            out = new PrintWriter(socket.getOutputStream(), true);
+            printWriterOut = new PrintWriter(socket.getOutputStream(), true);
 
             connectedToServer = true;
         }
-        catch (java.net.ConnectException e){
-            throw new ConnectException();
+        catch (java.net.SocketException e){
+            throw new java.net.SocketException();
+        }
+    }
+
+    public void disconnectFromServer() throws IOException {
+        if(connectedToServer){
+            br.close();
+            printWriterOut.close();
+            socket.close();
+            connectedToServer = false;
+        }
+        else{
+            System.out.println("[-] Cannot disconnect when not connected");
         }
 
     }
 
+    public String fetchDataFromServer() throws IOException {
+        return br.readLine();
+    }
 
-    public static void main(String args[]) throws IOException, InterruptedException {
-
-
-
-
-        /*String serverStr = br.readLine(); // Get str from server
-
-        // Send user input to server and display it on screen
-        out.println(username);
-        out.println(password);
-
-        // Get reply from server
-        String serverReply = br.readLine();
-        System.out.println("server says:" + serverReply);
-
-
-
-        while (true) {
-            try {
-
-            }
-            catch (java.net.ConnectException e){
-                System.out.println("[-] Error: Could not connect to server, connection refused");
-                System.out.println("Waiting 5 seconds to retry connection");
-                Thread.sleep(5000);
-            }
-        }*/
+    public void sendStringToServer(String strToSend){
+        printWriterOut.println(strToSend);
     }
 }
