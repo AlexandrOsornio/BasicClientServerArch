@@ -14,7 +14,7 @@ public class Database
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeffery","root","passwordTeam6");
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select password from usercredentials where username=\"tom\"");
+            ResultSet rs = stmt.executeQuery("select email from usercredentials where username=\"pog\"");
             while(rs.next()) {
                 System.out.println(rs.getString(1));
             }
