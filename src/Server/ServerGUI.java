@@ -31,9 +31,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
-public class boxLayoutAdmin extends JFrame{
+public class ServerGUI extends JFrame{
 
 	public int aUsers = 0;
 	public int rUsers = 0;
@@ -41,10 +42,23 @@ public class boxLayoutAdmin extends JFrame{
     private final int WIDTH = 500;
     private final int HEIGHT = 500;
 
-    public boxLayoutAdmin()
+	Server server = new Server();
+
+	JFrame frame;
+
+	Timer T;
+    JButton logOut;
+	JLabel activeUsers;
+	JLabel registeredUsers;
+	JScrollPane userStatusList;
+	JTextArea output;
+
+    public ServerGUI()
 	{
 		// -- construct the base JFrame first
 		super();
+
+		frame = this;
 		
 		// -- set the application title
 		this.setTitle("PerfectNumberGui");
@@ -70,12 +84,7 @@ public class boxLayoutAdmin extends JFrame{
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         panel.setBorder(new EmptyBorder(28, 28, 28, 28));
 
-        //add elements here
-        JButton logOut;
-		JLabel activeUsers;
-		JLabel registeredUsers;
-		JScrollPane userStatusList;
-		JTextArea output;
+        
 
 		//add the components to the pannel and set their location
 		//-------------------------------------------------------
@@ -83,11 +92,11 @@ public class boxLayoutAdmin extends JFrame{
 		logOut.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(logOut);
 
-		activeUsers = new JLabel("active users: " + aUsers);
+		activeUsers = new JLabel("Logged in users: " + aUsers);
 		activeUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(activeUsers);
 
-		registeredUsers = new JLabel("total users: " + rUsers);
+		registeredUsers = new JLabel("connected users: " + rUsers);
 		registeredUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(registeredUsers);
 
@@ -110,12 +119,37 @@ public class boxLayoutAdmin extends JFrame{
         
 		// -- show the frame on the screen
 		this.setVisible(true);		
+
+		server.StartServer();
+		T = new Timer(500,new RefreshContent());
+		T.start();
 	}
+
+	class RefreshContent implements ActionListener
+    {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            aUsers = server.getNumOfLoggedInUsers();
+			rUsers = server.getNumOfConnectedClients();
+			userStatusList.removeAll();
+			String [] usernames = server.getUsernameOfLoggedInUsers();
+			for(int i = 0; i < usernames.length; i++)
+			{
+				JLabel temp = new JLabel(usernames[i]);
+				userStatusList.add(temp);
+			}
+			
+			frame.repaint();
+            
+        }
+        
+    }
     
 
     public static void main(String [] args)
     {
-        new boxLayoutAdmin();
+        new ServerGUI();
     }
     
 }
