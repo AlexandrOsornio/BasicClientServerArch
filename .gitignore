@@ -1,4 +1,8 @@
 /.idea/
 .idea
 /out/
+<<<<<<< HEAD
 src/testerFile.java
+=======
+/TestPackage/
+>>>>>>> 974dddcc4f74adb807790229167839291978c7ee
