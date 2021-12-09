@@ -46,7 +46,7 @@ public class Database {
     {
         try
         {
-            stmt.executeUpdate("INSERT INTO users VALUE("+ username + ", '"+password+"', '"+email+"', 0);");
+            stmt.executeUpdate("INSERT INTO users VALUES("+ username + ", '"+password+"', '"+email+"', 0);");
         }
         catch (Exception e)
         {
