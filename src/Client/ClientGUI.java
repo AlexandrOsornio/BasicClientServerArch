@@ -21,7 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-public class boxLayoutClient extends JFrame {
+public class ClientGUI extends JFrame {
     
     //creates final variables for the size of the JFrame
     private final int WIDTH = 500;
@@ -68,7 +68,7 @@ public class boxLayoutClient extends JFrame {
     Client client = new Client(IP,PORT);
 
     //constructor for the JFrame
-    public boxLayoutClient()
+    public ClientGUI()
 	{
 		// -- construct the base JFrame first
 		super();
@@ -528,6 +528,6 @@ public class boxLayoutClient extends JFrame {
 	//main method used to run the client
     public static void main(String [] args)
     {
-        new boxLayoutClient();
+        new ClientGUI();
     }
 }
