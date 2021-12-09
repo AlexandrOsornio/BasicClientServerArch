@@ -46,11 +46,11 @@ public class Database {
     {
         try
         {
-            stmt.executeUpdate("INSERT INTO users VALUE("+ username + ", '"+password+"', '"+email+"', 0);");
+            stmt.executeUpdate("INSERT INTO users COLUMN (username, password, email, lockoutCount) VALUES ("+ username + ", '"+password+"', '"+email+"', 0);");
         }
         catch (Exception e)
         {
-
+            System.out.println(e);
         }
     }
 
@@ -64,7 +64,7 @@ public class Database {
         }
         catch(Exception e)
         {
-
+            System.out.println(e);
         }
         return str;
     }
@@ -79,7 +79,7 @@ public class Database {
         }
         catch(Exception e)
         {
-
+            System.out.println(e);
         }
         return str;
     }
@@ -94,7 +94,7 @@ public class Database {
         }
         catch(Exception e)
         {
-
+            System.out.println(e);
         }
         return lc;
     }
@@ -107,7 +107,7 @@ public class Database {
         }
         catch(Exception e)
         {
-
+            System.out.println(e);
         }
     }
 
@@ -119,7 +119,7 @@ public class Database {
         }
         catch(Exception e)
         {
-
+            System.out.println(e);
         }
     }
 }
