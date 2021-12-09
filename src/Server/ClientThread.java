@@ -6,22 +6,28 @@ import java.net.Socket;
 public class ClientThread extends Thread{
     // Class is instantiated in a new thread every time a client connects
 
-    private Socket socket;
+    private final Socket socket;
+    private final PrintWriter pw;
+    private final BufferedReader br;
+    private boolean threadActive;
 
-    ClientThread(Socket clientSocket){
+    ClientThread(Socket clientSocket) throws IOException {
         socket = clientSocket;
+        OutputStream os = socket.getOutputStream();
+        pw = new PrintWriter(os, true);
+        br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        threadActive = true;
     }
 
     public void run(){
         //while (true) {
         try {
-            // Lines required to send data
-            OutputStream os = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(os, true);
+            // Sending data
             pw.println("Provide username and password for log in"); // Send str to client
 
             // Lines required to receive data
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
             String username = br.readLine(); // Get str from client
             String password = br.readLine(); // Get str from client
 
@@ -33,13 +39,23 @@ public class ClientThread extends Thread{
             } catch (NullPointerException e) {
                 System.out.println("[-] Error: Client disconnected");
             }
-
-            //pw.close();
-            //socket.close();
         }
         catch (IOException e){
             System.out.println(e);
+            terminateConnection();
         }
         //}
     }
+
+    private void terminateConnection(){
+        threadActive = false;
+        try{
+            br.close();
+            pw.close();
+            socket.close();
+        }
+        catch (IOException ignore){}
+    }
+
+    public boolean getThreadStatus(){return threadActive;}
 }
