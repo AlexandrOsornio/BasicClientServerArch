@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -25,6 +26,8 @@ public class boxLayoutClient extends JFrame {
     //creates final variables for the size of the JFrame
     private final int WIDTH = 500;
     private final int HEIGHT = 500;
+
+    public boolean lockedOut = false;
 
     //create all the components
     //these will later be initalized inside the methods that define the JPanels
@@ -59,6 +62,11 @@ public class boxLayoutClient extends JFrame {
     JPanel DisplayContent = loggedIn();
     JPanel newPassword = changePassword();
 
+    public final String IP = "127.0.0.1";
+    public final int PORT = 2500;
+
+    Client client = new Client(IP,PORT);
+
     //constructor for the JFrame
     public boxLayoutClient()
 	{
@@ -91,6 +99,15 @@ public class boxLayoutClient extends JFrame {
 
         //displays the starting state of the client which is the log in screen
         this.add(LogInUser);
+
+        try 
+        {
+            client.connectToServer();
+        }
+        catch (Exception e)
+        {
+
+        }
 	}
 
     //following are the methods that are used to define The 4 JPanels
@@ -297,28 +314,37 @@ public class boxLayoutClient extends JFrame {
         
     }
 
-    class LogInSubmit implements ActionListener
+    class LogInSubmit implements ActionListener //throws IOException
     {
         //if user is valid user is sent to the logged in screen
         //if not fields are cleared and they remain there
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (authenticateUser(username.getText(), password.getText()))
+            try
             {
-                username.setText("");
-                password.setText("");
-                frame.add(DisplayContent);
-                DisplayContent.setVisible(true);
-                LogInUser.setVisible(false);
-                LogInUser.repaint();
-                DisplayContent.repaint();
-                frame.repaint();
+                if (authenticateUser(username.getText(), password.getText()))
+                {
+                    username.setText("");
+                    password.setText("");
+                    frame.add(DisplayContent);
+                    DisplayContent.setVisible(true);
+                    LogInUser.setVisible(false);
+                    LogInUser.repaint();
+                    DisplayContent.repaint();
+                    frame.repaint();
+                }
+                else
+                {
+                    username.setText("");
+                    password.setText("");
+                }
             }
-            else
+            catch (IOException exc)
             {
-                username.setText("");
-                password.setText("");
+
             }
+
+            
         }
 
     }
@@ -344,22 +370,30 @@ public class boxLayoutClient extends JFrame {
         //if passwords match and are valid the user is sent to the log in screen and logged out
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (resetPassword(password.getText(), confirm.getText()))
+            try 
             {
-                password.setText("");
-                confirm.setText("");
-                LogInUser.setVisible(true);
-                newPassword.setVisible(false);
-                newPassword.repaint();
-                LogInUser.repaint();
-                frame.repaint();
-                logOutUser();
+                if (resetPassword(password.getText(), confirm.getText()))
+                {
+                    password.setText("");
+                    confirm.setText("");
+                    LogInUser.setVisible(true);
+                    newPassword.setVisible(false);
+                    newPassword.repaint();
+                    LogInUser.repaint();
+                    frame.repaint();
+                    logOutUser();
+                }
+                else
+                {
+                    password.setText("");
+                    confirm.setText("");
+                }
             }
-            else
+            catch (IOException exc)
             {
-                password.setText("");
-                confirm.setText("");
+
             }
+            
         }
         
     }
@@ -369,13 +403,19 @@ public class boxLayoutClient extends JFrame {
         //user is sent to the log in screen ad logged out
         @Override
         public void actionPerformed(ActionEvent e) {
-            LogInUser.setVisible(true);
-            DisplayContent.setVisible(false);
-            DisplayContent.repaint();
-            LogInUser.repaint();
-            frame.repaint();
-            logOutUser();
-            
+            try
+            {
+                LogInUser.setVisible(true);
+                DisplayContent.setVisible(false);
+                DisplayContent.repaint();
+                LogInUser.repaint();
+                frame.repaint();
+                logOutUser();
+            }
+            catch (IOException exc)
+            {
+
+            }
         }
 
     } 
@@ -385,22 +425,29 @@ public class boxLayoutClient extends JFrame {
         //if a submitted credentals are valid and not already in use then user is sent to the log in screen
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (createNewUser(username.getText(), password.getText(), email.getText()))
+            try 
             {
-                username.setText("");
-                password.setText("");
-                email.setText("");
-                LogInUser.setVisible(true);
-                SignUpUser.setVisible(false);
-                SignUpUser.repaint();
-                LogInUser.repaint();
-                frame.repaint();
+                if (createNewUser(username.getText(), password.getText(), email.getText()))
+                {
+                    username.setText("");
+                    password.setText("");
+                    email.setText("");
+                    LogInUser.setVisible(true);
+                    SignUpUser.setVisible(false);
+                    SignUpUser.repaint();
+                    LogInUser.repaint();
+                    frame.repaint();
+                }
+                else
+                {
+                    username.setText("");
+                    password.setText("");
+                    email.setText("");
+                }
             }
-            else
+            catch (IOException exc)
             {
-                username.setText("");
-                password.setText("");
-                email.setText("");
+
             }
         }
         
@@ -410,35 +457,72 @@ public class boxLayoutClient extends JFrame {
     //other methods
     //mainly for comunicating with the server
 
-    public boolean authenticateUser(String username, String password)
+    public boolean authenticateUser(String username, String password) throws IOException
     {
         //send over info to server to check for correctness
         //true if valid false if invalid
-        return true;
+        client.sendStringToServer("login\n" + username + "\n" + password);
+        String str = client.fetchDataFromServer();
+        
+        if(str.equals("loginsuccess"))
+        {
+            return true;
+        }
+        else if (str.equals("loginfail"))
+        {
+            return false;
+        }
+        else 
+        {
+            lockedOut = true;
+            return false;
+        }
     }
 
-    public boolean createNewUser(String username, String password, String email)
+    public boolean createNewUser(String username, String password, String email) throws IOException
     {
         //send info to server
         //server attempts to create a new user
         //if it works return true
         //if it does not return false
-        return true;
+        client.sendStringToServer("signup\n" + email + "\n" + username + "\n" + password);
+        String str = client.fetchDataFromServer();
+        
+        if(str.equals("signupsuccess"))
+        {
+            return true;
+        }
+        else //signupfail
+        {
+            return false;
+        }
     }
 
-    public boolean resetPassword(String password, String confirmPassword)
+    public boolean resetPassword(String password, String confirmPassword) throws IOException
     {
         //send over password and confrim password
         //server resets password if it is valid
         //if true password was reset
         //if false password could not be reset
-        return true;
+        client.sendStringToServer("changepass\n" + password + "\n" + confirmPassword);
+        String str = client.fetchDataFromServer();
+        
+        if(str.equals("changepasssuccess"))
+        {
+            return true;
+        }
+        else //changepassfail
+        {
+            return false;
+        }
     }
 
-    public void logOutUser()
+    public void logOutUser() throws IOException
     {
         //sends message to server to log out the user
         //server attempts to log out the user
+        client.sendStringToServer("logout");
+        String str = client.fetchDataFromServer();
     }
 
 	//main method used to run the client
