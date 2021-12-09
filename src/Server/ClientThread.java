@@ -2,6 +2,9 @@ package Server;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.concurrent.ThreadLocalRandom;
+
+import BootCampFiles.EmailManager;
 
 public class ClientThread extends Thread{
     // Class is instantiated in a new thread every time a client connects
@@ -11,6 +14,7 @@ public class ClientThread extends Thread{
     private final BufferedReader br;
     private boolean threadActive;
     private String username;
+    private EmailManager em;
 
     ClientThread(Socket clientSocket) throws IOException {
         socket = clientSocket;
@@ -20,6 +24,8 @@ public class ClientThread extends Thread{
 
         threadActive = true;
         username = "notLoggedIn";
+        em = new EmailManager("335Team6@gmail.com", "Team62021");
+
     }
 
     public void run(){
@@ -38,10 +44,11 @@ public class ClientThread extends Thread{
                             String username = br.readLine();
                             String password = br.readLine();
 
-                            System.out.println("Signup data");
+                            //TODO: Insert user data into database
+                            /*System.out.println("Signup data");
                             System.out.println(email);
                             System.out.println(username);
-                            System.out.println(password);
+                            System.out.println(password);*/
 
                         }
                         else if(command.equals("login")){
@@ -71,6 +78,17 @@ public class ClientThread extends Thread{
                             else {
                                 pw.println("passwords do not match");
                             }
+                        }
+                        else if(command.equals("resetpass")){
+
+                            int newPass = ThreadLocalRandom.current().nextInt(8, 16 + 1);
+
+                            //TODO: Get user's email from database
+                            //TODO: Update password in database
+
+                            String userEmail = "";
+
+                            em.sendEmail(userEmail, "Account recovery", Integer.toString(newPass));
                         }
                     }
                 }
