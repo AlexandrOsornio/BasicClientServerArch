@@ -67,7 +67,7 @@ public class Client {
         return br.readLine();
     }
 
-    public void sendStringToServer(String strToSend){
+    public void sendMessage(String strToSend){
         printWriterOut.println(strToSend);
     }
 }

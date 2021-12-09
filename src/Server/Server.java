@@ -21,7 +21,28 @@ public class Server {
     public int getNumOfConnectedClients(){
         return numOfConnectedClients;
     }
+    public String[] getUsernameOfLoggedInUsers(){
+        String[] fullList;
+        ArrayList<String> list = new ArrayList<String>();
 
+        for(int i = 0; i<threadList.size(); i++){
+            String usr = threadList.get(i).getUsername();
+            if(!usr.equals("notLoggedIn"))
+                list.add(usr);
+        }
+
+        fullList = new String[list.size()];
+
+        for(int i = 0; i<list.size(); i++){
+            fullList[i] = list.get(i);
+        }
+
+        return fullList;
+
+    }
+    public int getNumOfLoggedInUsers(){
+        return getUsernameOfLoggedInUsers().length;
+    }
 
     private void listenForIncomingConnections(){
         // -- Method is constantly running listening for incoming client
@@ -77,7 +98,7 @@ public class Server {
         }
     }
 
-    public static void main(String[] args){
+    public void StartServer(){
         // Create server obj
         Server server = new Server();
 
