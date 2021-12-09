@@ -3,7 +3,6 @@ package Server;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 public class Server {
@@ -12,7 +11,7 @@ public class Server {
     private Integer numOfConnectedClients;
     private ArrayList<ClientThread> threadList;
 
-    Server(){
+    public Server(){
         portNumber = 2500;
         numOfConnectedClients = 0;
         threadList = new ArrayList<ClientThread>();
@@ -21,7 +20,7 @@ public class Server {
     public int getNumOfConnectedClients(){
         return numOfConnectedClients;
     }
-    public String[] getUsernameOfLoggedInUsers(){
+    public String[] getUsernamesOfLoggedInUsers(){
         String[] fullList;
         ArrayList<String> list = new ArrayList<String>();
 
@@ -40,8 +39,22 @@ public class Server {
         return fullList;
 
     }
+    public String[] getUsernamesOfConnectedUsers(){
+        return getUsernamesOfLoggedInUsers();
+    }
     public int getNumOfLoggedInUsers(){
-        return getUsernameOfLoggedInUsers().length;
+        return getUsernamesOfLoggedInUsers().length;
+    }
+    public int getNumOfRegisteredUsers(){
+        //TODO: Get string array from database and get its length
+        int numOfRegUsers = 0;
+        return numOfRegUsers;
+    }
+    public String[] getLockedOutUsers(){
+        //TODO: Get string array from database
+        String[] lockedOutUsers = {"asd", "asdasd"};
+
+        return lockedOutUsers;
     }
 
     private void listenForIncomingConnections(){
@@ -94,7 +107,7 @@ public class Server {
             }
             catch (InterruptedException e){}
 
-            System.out.println(numOfConnectedClients);
+            //System.out.println(numOfConnectedClients);
         }
     }
 
@@ -110,4 +123,5 @@ public class Server {
         connectionsThread.start();
         monitorThread.start();
     }
+
 }

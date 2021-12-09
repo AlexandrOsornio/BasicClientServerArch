@@ -2,9 +2,14 @@ package Database;
 
 import java.sql.*;
 
+<<<<<<< HEAD
 public class Database 
 {
     
+=======
+public class Database {
+
+>>>>>>> 341d79e2169a316d81419a3b18680dc4277b9e4e
     // -- objects to be used for database access
     private Connection conn = null;
     private Statement stmt = null;
@@ -14,7 +19,11 @@ public class Database
     // -- this is the connector to the database, default port is 3306
 //    private String url = "jdbc:mysql://localhost:3306/world";
     private String url = "jdbc:mysql://localhost:3306/jeffery";
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 341d79e2169a316d81419a3b18680dc4277b9e4e
     // -- this is the username/password, created during installation and in MySQL Workbench
     //    When you add a user make sure you give them the appropriate Administrative Roles
     //    (DBA sets all which works fine)
@@ -22,6 +31,7 @@ public class Database
     private static String password = "admin";
 
     public Database() {
+<<<<<<< HEAD
     	try {
 			// -- make the connection to the database
 			conn = DriverManager.getConnection(url, username, password);
@@ -43,6 +53,29 @@ public class Database
     	
     }
     
+=======
+        try {
+            // -- make the connection to the database
+            conn = DriverManager.getConnection(url, username, password);
+
+            // -- These will be used to send queries to the database
+            stmt = conn.createStatement();
+            rset = stmt.executeQuery("SELECT VERSION()");
+
+            if (rset.next()) {
+                System.out.println("MySQL version: " + rset.getString(1) + "\n=====================\n");
+            }
+        }
+        catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+    }
+
+>>>>>>> 341d79e2169a316d81419a3b18680dc4277b9e4e
     public void addUser(String username, String Password, String email)
     {
         try
@@ -108,7 +141,11 @@ public class Database
         }
         catch(Exception e)
         {
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 341d79e2169a316d81419a3b18680dc4277b9e4e
         }
     }
 
@@ -120,7 +157,14 @@ public class Database
         }
         catch(Exception e)
         {
+<<<<<<< HEAD
             
         }
     }
 }
+=======
+
+        }
+    }
+}
+>>>>>>> 341d79e2169a316d81419a3b18680dc4277b9e4e
