@@ -23,57 +23,64 @@ public class ClientThread extends Thread{
     }
 
     public void run(){
+        // Sending data
+        pw.println("connected");
         while (true) {
             try {
-                // Sending data
-                pw.println("connected");
 
                 // Lines required to receive data
                 String command = br.readLine();
+                if(command!= null){
+                    if(!command.equals("")){
+                        if(command.equals("signup")){
 
-                if(command.equals("signup")){
+                            String email = br.readLine();
+                            String username = br.readLine();
+                            String password = br.readLine();
 
-                    String email = br.readLine();
-                    String username = br.readLine();
-                    String password = br.readLine();
+                            System.out.println("Signup data");
+                            System.out.println(email);
+                            System.out.println(username);
+                            System.out.println(password);
 
-                    /*System.out.println("Signup data");
-                    System.out.println(email);
-                    System.out.println(username);
-                    System.out.println(password);*/
+                        }
+                        else if(command.equals("login")){
+                            String username = br.readLine();
+                            String password = br.readLine();
 
-                }
-                else if(command.equals("login")){
-                    String username = br.readLine();
-                    String password = br.readLine();
+                            //TODO: Get credentials from database
 
-                    //TODO: Get credentials from database
+                            if (username.equals("<<username>>") && password.equals("<<password>>"))
+                                pw.println("Login successful");
+                            else
+                                pw.println("Incorrect username or password");
+                        }
+                        else if(command.equals("logout")){
+                            terminateConnection();
+                            break;
+                        }
+                        else if(command.equals("changepass")){
 
-                    if (username.equals("<<username>>") && password.equals("<<password>>"))
-                        pw.println("Login successful");
-                    else
-                        pw.println("Incorrect username or password");
-                }
-                else if(command.equals("logout")){
-                    terminateConnection();
-                }
-                else if(command.equals("changepass")){
+                            String newPassword = br.readLine();
+                            String confirmPassword = br.readLine();
 
-                    String newPassword = br.readLine();
-                    String confirmPassword = br.readLine();
-
-                    if(newPassword.equals(confirmPassword)){
-                        //TODO: Update database with new passwords
-                        pw.println("password updated successfully");
+                            if(newPassword.equals(confirmPassword)){
+                                //TODO: Update database with new passwords
+                                pw.println("password updated successfully");
+                            }
+                            else {
+                                pw.println("passwords do not match");
+                            }
+                        }
                     }
-                    else {
-                        pw.println("passwords do not match");
-                    }
                 }
+
+                Thread.sleep(200);
             }
-            catch (IOException e){
+            catch (IOException | InterruptedException e){
                 System.out.println(e);
                 terminateConnection();
+                break;
             }
         }
     }

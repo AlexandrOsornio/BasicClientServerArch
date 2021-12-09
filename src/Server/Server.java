@@ -12,7 +12,7 @@ public class Server {
     private Integer numOfConnectedClients;
     private ArrayList<ClientThread> threadList;
 
-    Server(){
+    public Server(){
         portNumber = 2500;
         numOfConnectedClients = 0;
         threadList = new ArrayList<ClientThread>();
@@ -110,4 +110,5 @@ public class Server {
         connectionsThread.start();
         monitorThread.start();
     }
+
 }
