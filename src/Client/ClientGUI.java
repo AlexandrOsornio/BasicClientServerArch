@@ -55,7 +55,7 @@ public class ClientGUI extends JFrame {
     JScrollPane male;
     JScrollPane contentPane;
     JLabel serverMessages;
-    Timer UpdateClock;
+    //Timer UpdateClock;
     
 
     //create JFrame that will be used as a value to refrence itself
@@ -69,10 +69,10 @@ public class ClientGUI extends JFrame {
     JPanel DisplayContent = loggedIn();
     JPanel newPassword = changePassword();
 
-    public final String IP = "127.0.0.1";
+    public final String IP = "localhost";
     public final int PORT = 2500;
 
-    Client client = new Client(IP,PORT);
+    Client client = new Client();
 
     //constructor for the JFrame
     public ClientGUI()
@@ -109,11 +109,13 @@ public class ClientGUI extends JFrame {
 
         try 
         {
+            System.out.println("1");
             client.connectToServer();
+            System.out.println("2");
         }
         catch (Exception e)
         {
-
+            System.out.println(e);
         }
 	}
 
@@ -297,8 +299,8 @@ public class ClientGUI extends JFrame {
         contentPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(contentPane);
 
-        UpdateClock = new Timer(500,new RefreshContent());
-        UpdateClock.start();
+        //UpdateClock = new Timer(500,new RefreshContent());
+        //UpdateClock.start();
 
         return panel;
     }
@@ -467,7 +469,7 @@ public class ClientGUI extends JFrame {
         }
         
     }
-
+/*
     class RefreshContent implements ActionListener
     {
 
@@ -485,7 +487,7 @@ public class ClientGUI extends JFrame {
         }
         
     }
-
+*/
 
     //other methods
     //mainly for comunicating with the server
@@ -520,7 +522,7 @@ public class ClientGUI extends JFrame {
         //if it does not return false
         client.sendMessage("signup\n" + email + "\n" + username + "\n" + password);
         String str = client.fetchDataFromServer();
-        
+        /*
         if(str.equals("signupsuccess"))
         {
             return true;
@@ -529,6 +531,8 @@ public class ClientGUI extends JFrame {
         {
             return false;
         }
+        */
+        return true;
     }
 
     public boolean resetPassword(String password, String confirmPassword) throws IOException
@@ -557,7 +561,7 @@ public class ClientGUI extends JFrame {
         client.sendMessage("logout");
         String str = client.fetchDataFromServer();
     }
-
+/*
     public void updateContent() throws IOException
     {
         client.sendMessage("updatecontent");
@@ -566,7 +570,7 @@ public class ClientGUI extends JFrame {
         DisplayContent.repaint();
         frame.repaint();
     }
-
+*/
 	//main method used to run the client
     public static void main(String [] args)
     {
