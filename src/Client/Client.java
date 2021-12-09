@@ -8,53 +8,66 @@ import java.net.Socket;
 
 public class Client {
 
+    private final String ip;
+    private final int portNumber; // 0-1023 to 65535
 
-    public static void main(String args[]) throws IOException, InterruptedException {
-        final String ip = "localhost";
-        final int portNumber = 2500; // 0-1023 to 65535
-        System.out.println("Creating socket to '" + ip + "' on port " + portNumber);
+    private boolean connectedToServer;
+    private Socket socket;
+    private BufferedReader br;
+    PrintWriter printWriterOut;
 
-        while (true) {
-            try {
-                // Connect to server using Socket obj
-                Socket socket = new Socket(ip, portNumber);
+    // Default constructor for testing on local host
+    public Client(){
+        ip = "localhost";
+        portNumber = 2500;
+        connectedToServer = false;
+    }
+    // Constructor must receive IP and PortNumber of the server
+    public Client(String IP, int PortNumber){
+        ip = IP;
+        portNumber = PortNumber;
+        connectedToServer = false;
+    }
 
-                // BufferReader gets data from InputStreamReader which received it through the socket's input stream
-                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String serverStr = br.readLine(); // Get str from server
+    public void connectToServer() throws IOException {
+        try{
+            // Connect to server using Socket obj
+            System.out.println("Creating socket to '" + ip + "' on port " + portNumber);
+            socket = new Socket(ip, portNumber);
 
-                System.out.println("Server says: " + serverStr);
+            // Create a BufferReader from socket connection to read data from server
+            // BufferReader gets data from InputStreamReader which received it through the socket's input stream
+            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                // PrintWriter sends data to the server using the socket's output stream and flushes the buffer
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            // Create PrintWriter from socket to send data to the server
+            // PrintWriter sends data to the server using the socket's output stream and flushes the buffer
+            printWriterOut = new PrintWriter(socket.getOutputStream(), true);
 
-                // Capture user input
-                BufferedReader userInputBR = new BufferedReader(new InputStreamReader(System.in));
-                System.out.print("Username: ");
-                String username = userInputBR.readLine();
-                System.out.print("Password: ");
-                String password = userInputBR.readLine();
-
-                if ("exit".equalsIgnoreCase(username)) {
-                    socket.close();
-                    break;
-                }
-
-                // Send user input to server and display it on screen
-                out.println(username);
-                out.println(password);
-
-                // Get reply from server
-                String serverReply = br.readLine();
-                System.out.println("server says:" + serverReply);
-
-
-            }
-            catch (java.net.ConnectException e){
-                System.out.println("[-] Error: Could not connect to server, connection refused");
-                System.out.println("Waiting 5 seconds to retry connection");
-                Thread.sleep(5000);
-            }
+            connectedToServer = true;
         }
+        catch (java.net.SocketException e){
+            throw new java.net.SocketException();
+        }
+    }
+
+    public void disconnectFromServer() throws IOException {
+        if(connectedToServer){
+            br.close();
+            printWriterOut.close();
+            socket.close();
+            connectedToServer = false;
+        }
+        else{
+            System.out.println("[-] Cannot disconnect when not connected");
+        }
+
+    }
+
+    public String fetchDataFromServer() throws IOException {
+        return br.readLine();
+    }
+
+    public void sendStringToServer(String strToSend){
+        printWriterOut.println(strToSend);
     }
 }
