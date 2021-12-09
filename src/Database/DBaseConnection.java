@@ -24,13 +24,13 @@ public class DBaseConnection {
     // -- connect to the world database
     // -- this is the connector to the database, default port is 3306
 //    private String url = "jdbc:mysql://localhost:3306/world";
-    private String url = "jdbc:mysql://localhost:3306/csc335project";
+    private String url = "jdbc:mysql://localhost:3306/jeffery";
     
     // -- this is the username/password, created during installation and in MySQL Workbench
     //    When you add a user make sure you give them the appropriate Administrative Roles
     //    (DBA sets all which works fine)
-    private static String username = "<<Your MySQL username>>";
-    private static String password = "<<Your MySQL password>>";
+    private static String username = "root";
+    private static String password = "admin";
 
     public DBaseConnection() {
     	try {
