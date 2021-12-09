@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 public class ClientGUI extends JFrame {
@@ -26,6 +27,8 @@ public class ClientGUI extends JFrame {
     //creates final variables for the size of the JFrame
     private final int WIDTH = 500;
     private final int HEIGHT = 500;
+
+    String serverMessageContent = "bottom text";
 
     public boolean lockedOut = false;
 
@@ -50,6 +53,10 @@ public class ClientGUI extends JFrame {
     JLabel e;
     JScrollPane con;
     JScrollPane male;
+    JScrollPane contentPane;
+    JLabel serverMessages;
+    Timer UpdateClock;
+    
 
     //create JFrame that will be used as a value to refrence itself
     //used for accessing the JFrame outside of its constructor
@@ -285,6 +292,14 @@ public class ClientGUI extends JFrame {
         changePasswordButton.addActionListener(new DisplayResetPassword());
         panel.add(changePasswordButton);
 
+        serverMessages = new JLabel(serverMessageContent);
+        contentPane = new JScrollPane(serverMessages);
+        contentPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(contentPane);
+
+        UpdateClock = new Timer(500,new RefreshContent());
+        UpdateClock.start();
+
         return panel;
     }
 
@@ -453,6 +468,24 @@ public class ClientGUI extends JFrame {
         
     }
 
+    class RefreshContent implements ActionListener
+    {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try
+            {
+                updateContent();
+            }
+            catch (IOException exc)
+            {
+
+            }
+            
+        }
+        
+    }
+
 
     //other methods
     //mainly for comunicating with the server
@@ -523,6 +556,15 @@ public class ClientGUI extends JFrame {
         //server attempts to log out the user
         client.sendStringToServer("logout");
         String str = client.fetchDataFromServer();
+    }
+
+    public void updateContent() throws IOException
+    {
+        client.sendStringToServer("updatecontent");
+        serverMessageContent = client.fetchDataFromServer();
+        serverMessages.setText(serverMessageContent);
+        DisplayContent.repaint();
+        frame.repaint();
     }
 
 	//main method used to run the client
