@@ -18,11 +18,12 @@ public class testerFile {
         try{
             client.connectToServer();
 
-            String dataFromServer = client.fetchDataFromServer();
-            System.out.println(dataFromServer);
+            String dataFromServer;
+            //dataFromServer = client.fetchDataFromServer();
+            //System.out.println(dataFromServer);
 
-            client.sendStringToServer("reinhart");
-            client.sendStringToServer("1234");
+            client.sendMessage("signup\nusername@sample.com\nusername123\npassword123\nend");
+            //client.sendMessage("1234");
 
             dataFromServer = client.fetchDataFromServer();
             System.out.println(dataFromServer);
