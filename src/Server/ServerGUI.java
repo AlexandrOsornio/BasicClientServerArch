@@ -39,38 +39,50 @@ public class ServerGUI extends JFrame{
 	public int aUsers = 0;
 	public int rUsers = 0;
 
-    private final int WIDTH = 500;
-    private final int HEIGHT = 500;
+	private final int WIDTH = 500;
+	private final int HEIGHT = 500;
 
 	Server server = new Server();
 
 	JFrame frame;
 
 	Timer T;
+<<<<<<< HEAD
     JButton logOut;
+=======
+	JButton logOut;
+>>>>>>> e5b08804b69dd77f5d9fd2a430529dd658255d9b
 	JLabel activeUsers;
 	JLabel registeredUsers;
 	JScrollPane userStatusList;
 	JTextArea output;
 
+<<<<<<< HEAD
     public ServerGUI()
+=======
+	public ServerGUI()
+>>>>>>> e5b08804b69dd77f5d9fd2a430529dd658255d9b
 	{
 		// -- construct the base JFrame first
 		super();
 
 		frame = this;
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> e5b08804b69dd77f5d9fd2a430529dd658255d9b
 		// -- set the application title
 		this.setTitle("PerfectNumberGui");
-				
+
 		// -- initial size of the frame: width, height
 		this.setSize(WIDTH, HEIGHT);
-		
+
 		// -- center the frame on the screen
 		this.setLocationRelativeTo(null);
-		
+
 		// -- shut down the entire application when the frame is closed
-		//    if you don't include this the application will continue to		
+		//    if you don't include this the application will continue to
 		//    run in the background and you'll have to kill it by pressing
 		//    the red square in eclipse
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,17 +92,21 @@ public class ServerGUI extends JFrame{
 		//setLayout(new BorderLayout());
 
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        panel.setBorder(new EmptyBorder(28, 28, 28, 28));
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		panel.setBorder(new EmptyBorder(28, 28, 28, 28));
 
+
+<<<<<<< HEAD
         
+=======
+>>>>>>> e5b08804b69dd77f5d9fd2a430529dd658255d9b
 
 		//add the components to the pannel and set their location
 		//-------------------------------------------------------
-        logOut = new JButton("log out");
+		logOut = new JButton("log out");
 		logOut.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(logOut);
+		panel.add(logOut);
 
 		activeUsers = new JLabel("Logged in users: " + aUsers);
 		activeUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -100,22 +116,23 @@ public class ServerGUI extends JFrame{
 		registeredUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(registeredUsers);
 
-        int width = 10, height = 1;
+		int width = 10, height = 1;
 		output = new JTextArea("",5,5);
 		userStatusList = new JScrollPane(output);
-        userStatusList.setSize(new Dimension(width,height));
+		userStatusList.setSize(new Dimension(width,height));
 		panel.add(userStatusList);
 
 		//---------------------------------------------------------
 
-        JPanel space = new JPanel();
-        panel.add(space);
-        
+		JPanel space = new JPanel();
+		panel.add(space);
 
-        this.getContentPane().add(panel);
+
+		this.getContentPane().add(panel);
 
 		// -- can make it so the user cannot resize the frame
 		this.setResizable(false);
+<<<<<<< HEAD
         
 		// -- show the frame on the screen
 		this.setVisible(true);		
@@ -153,3 +170,42 @@ public class ServerGUI extends JFrame{
     }
     
 }
+=======
+
+		// -- show the frame on the screen
+		this.setVisible(true);
+
+		server.StartServer();
+		T = new Timer(500,new RefreshContent());
+		T.start();
+	}
+
+	class RefreshContent implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			aUsers = server.getNumOfLoggedInUsers();
+			rUsers = server.getNumOfConnectedClients();
+			userStatusList.removeAll();
+			String [] usernames = server.getUsernamesOfLoggedInUsers();
+			for(int i = 0; i < usernames.length; i++)
+			{
+				JLabel temp = new JLabel(usernames[i]);
+				userStatusList.add(temp);
+			}
+
+			frame.repaint();
+
+		}
+
+	}
+
+
+	public static void main(String [] args)
+	{
+		new ServerGUI();
+	}
+
+}
+>>>>>>> e5b08804b69dd77f5d9fd2a430529dd658255d9b
