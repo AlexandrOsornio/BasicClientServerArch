@@ -494,7 +494,7 @@ public class ClientGUI extends JFrame {
     {
         //send over info to server to check for correctness
         //true if valid false if invalid
-        client.sendStringToServer("login\n" + username + "\n" + password);
+        client.sendMessage("login\n" + username + "\n" + password);
         String str = client.fetchDataFromServer();
         
         if(str.equals("loginsuccess"))
@@ -518,7 +518,7 @@ public class ClientGUI extends JFrame {
         //server attempts to create a new user
         //if it works return true
         //if it does not return false
-        client.sendStringToServer("signup\n" + email + "\n" + username + "\n" + password);
+        client.sendMessage("signup\n" + email + "\n" + username + "\n" + password);
         String str = client.fetchDataFromServer();
         
         if(str.equals("signupsuccess"))
@@ -537,7 +537,7 @@ public class ClientGUI extends JFrame {
         //server resets password if it is valid
         //if true password was reset
         //if false password could not be reset
-        client.sendStringToServer("changepass\n" + password + "\n" + confirmPassword);
+        client.sendMessage("changepass\n" + password + "\n" + confirmPassword);
         String str = client.fetchDataFromServer();
         
         if(str.equals("changepasssuccess"))
@@ -554,13 +554,13 @@ public class ClientGUI extends JFrame {
     {
         //sends message to server to log out the user
         //server attempts to log out the user
-        client.sendStringToServer("logout");
+        client.sendMessage("logout");
         String str = client.fetchDataFromServer();
     }
 
     public void updateContent() throws IOException
     {
-        client.sendStringToServer("updatecontent");
+        client.sendMessage("updatecontent");
         serverMessageContent = client.fetchDataFromServer();
         serverMessages.setText(serverMessageContent);
         DisplayContent.repaint();
