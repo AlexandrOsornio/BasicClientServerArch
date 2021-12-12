@@ -47,31 +47,19 @@ public class ServerGUI extends JFrame{
 	JFrame frame;
 
 	Timer T;
-<<<<<<< HEAD
     JButton logOut;
-=======
-	JButton logOut;
->>>>>>> e5b08804b69dd77f5d9fd2a430529dd658255d9b
 	JLabel activeUsers;
 	JLabel registeredUsers;
 	JScrollPane userStatusList;
 	JTextArea output;
 
-<<<<<<< HEAD
     public ServerGUI()
-=======
-	public ServerGUI()
->>>>>>> e5b08804b69dd77f5d9fd2a430529dd658255d9b
 	{
 		// -- construct the base JFrame first
 		super();
 
 		frame = this;
-<<<<<<< HEAD
 		
-=======
-
->>>>>>> e5b08804b69dd77f5d9fd2a430529dd658255d9b
 		// -- set the application title
 		this.setTitle("PerfectNumberGui");
 
@@ -97,10 +85,7 @@ public class ServerGUI extends JFrame{
 		panel.setBorder(new EmptyBorder(28, 28, 28, 28));
 
 
-<<<<<<< HEAD
         
-=======
->>>>>>> e5b08804b69dd77f5d9fd2a430529dd658255d9b
 
 		//add the components to the pannel and set their location
 		//-------------------------------------------------------
@@ -132,7 +117,6 @@ public class ServerGUI extends JFrame{
 
 		// -- can make it so the user cannot resize the frame
 		this.setResizable(false);
-<<<<<<< HEAD
         
 		// -- show the frame on the screen
 		this.setVisible(true);		
@@ -150,7 +134,7 @@ public class ServerGUI extends JFrame{
             aUsers = server.getNumOfLoggedInUsers();
 			rUsers = server.getNumOfConnectedClients();
 			userStatusList.removeAll();
-			String [] usernames = server.getUsernameOfLoggedInUsers();
+			String [] usernames = server.getUsernamesOfConnectedUsers();
 			for(int i = 0; i < usernames.length; i++)
 			{
 				JLabel temp = new JLabel(usernames[i]);
@@ -170,42 +154,3 @@ public class ServerGUI extends JFrame{
     }
     
 }
-=======
-
-		// -- show the frame on the screen
-		this.setVisible(true);
-
-		server.StartServer();
-		T = new Timer(500,new RefreshContent());
-		T.start();
-	}
-
-	class RefreshContent implements ActionListener
-	{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			aUsers = server.getNumOfLoggedInUsers();
-			rUsers = server.getNumOfConnectedClients();
-			userStatusList.removeAll();
-			String [] usernames = server.getUsernamesOfLoggedInUsers();
-			for(int i = 0; i < usernames.length; i++)
-			{
-				JLabel temp = new JLabel(usernames[i]);
-				userStatusList.add(temp);
-			}
-
-			frame.repaint();
-
-		}
-
-	}
-
-
-	public static void main(String [] args)
-	{
-		new ServerGUI();
-	}
-
-}
->>>>>>> e5b08804b69dd77f5d9fd2a430529dd658255d9b
