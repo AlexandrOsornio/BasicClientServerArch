@@ -57,12 +57,13 @@ public class ClientThread extends Thread{
 
                         }
                         else if(command.equals("login")){
-                            String username = br.readLine();
+                            String uname = br.readLine();
                             String password = br.readLine();
+                            username = uname;                            
 
                             //TODO: Get credentials from database
 
-                            if (password.equals(database.getUserPassword(username)))
+                            if (password.equals(database.getUserPassword(uname)))
                                 pw.println("loginsuccess");
                             else
                                 pw.println("loginfail");

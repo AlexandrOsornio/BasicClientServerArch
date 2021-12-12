@@ -1,6 +1,7 @@
 package Database;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Database {
 
@@ -39,7 +40,6 @@ public class Database {
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
-
     }
 
     public void addUser(String user, String pass, String email)
@@ -61,9 +61,13 @@ public class Database {
     {
         String str = "";
         try
-        {
+        {            
             ResultSet rs = stmt.executeQuery("SELECT password FROM users WHERE username='"+username+"'");
-            str = rs.getString("password");
+            if(rs.next())
+            {
+               str = rs.getString("password"); 
+               System.out.println(str);
+            }           
         }
         catch(SQLException e)
         {
@@ -78,7 +82,8 @@ public class Database {
         try
         {
             ResultSet rs = stmt.executeQuery("select email from users where username='"+username+"'");
-            str = rs.getString(3);
+            if (rs.next())
+                str = rs.getString(3);
         }
         catch(SQLException e)
         {
@@ -93,7 +98,8 @@ public class Database {
         try
         {
             ResultSet rs = stmt.executeQuery("select password from users where username='"+username+"'");
-            lc = rs.getInt(4);
+            if (rs.next())
+                lc = rs.getInt(4);
         }
         catch(SQLException e)
         {
@@ -125,4 +131,32 @@ public class Database {
             System.out.println(e);
         }
     }
+
+    public ArrayList covertResultSet(ResultSet rset)
+	{
+        ArrayList<String[]> r = new ArrayList<String[]>();
+		try {
+	        // -- the metadata tells us how many columns in the data
+			ResultSetMetaData rsmd = rset.getMetaData();
+	        int numberOfColumns = rsmd.getColumnCount();
+	        System.out.println("columns: " + numberOfColumns);
+	        
+	        // -- loop through the ResultSet one row at a time
+	        //    Note that the ResultSet starts at index 1
+	        while (rset.next()) {
+	        	// -- loop through the columns of the ResultSet
+	        	for (int i = 1; i < numberOfColumns; ++i) {
+	        		System.out.print(rset.getString(i) + "\t");
+	        	}
+	        	System.out.println(rset.getString(numberOfColumns));
+	        }
+		}
+		catch (SQLException ex) {
+			// handle any errors
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+        return r;
+	}
 }
