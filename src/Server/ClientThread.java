@@ -31,7 +31,7 @@ public class ClientThread extends Thread{
 
     public void run(){
         // Sending data
-        pw.println("connected");
+        //pw.println("connected");
         while (true) {
             try {
 
@@ -62,8 +62,9 @@ public class ClientThread extends Thread{
                             username = uname;                            
 
                             //TODO: Get credentials from database
-
-                            if (password.equals(database.getUserPassword(uname)))
+                            String str = database.getUserPassword(uname);
+                            System.out.println(str);
+                            if (password.equals(str))
                                 pw.println("loginsuccess");
                             else
                                 pw.println("loginfail");
