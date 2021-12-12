@@ -1,6 +1,7 @@
 package Database;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Database {
 
@@ -39,16 +40,18 @@ public class Database {
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
-
     }
 
-    public void addUser(String username, String Password, String email)
+    public void addUser(String user, String pass, String email)
     {
+        System.out.println(pass);
         try
         {
-            stmt.executeUpdate("INSERT INTO users COLUMN (username, password, email, lockoutCount) VALUES ("+ username + ", '"+password+"', '"+email+"', 0);");
+            System.out.println(pass);
+            stmt.executeUpdate("INSERT INTO users VALUES('"+ user +"', '"+pass+"', '"+email+"', 0)");
+            System.out.println(pass);
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             System.out.println(e);
         }
@@ -58,11 +61,15 @@ public class Database {
     {
         String str = "";
         try
-        {
-            ResultSet rs = stmt.executeQuery("select password from users where username='"+username+"'");
-            str = rs.getString(2);
+        {            
+            ResultSet rs = stmt.executeQuery("SELECT password FROM users WHERE username='"+username+"'");
+            if(rs.next())
+            {
+               str = rs.getString("password"); 
+               System.out.println(str);
+            }           
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
             System.out.println(e);
         }
@@ -75,9 +82,10 @@ public class Database {
         try
         {
             ResultSet rs = stmt.executeQuery("select email from users where username='"+username+"'");
-            str = rs.getString(3);
+            if (rs.next())
+                str = rs.getString(3);
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
             System.out.println(e);
         }
@@ -90,9 +98,10 @@ public class Database {
         try
         {
             ResultSet rs = stmt.executeQuery("select password from users where username='"+username+"'");
-            lc = rs.getInt(4);
+            if (rs.next())
+                lc = rs.getInt(4);
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
             System.out.println(e);
         }
@@ -103,9 +112,9 @@ public class Database {
     {
         try
         {
-            stmt.executeUpdate("UPDATE users SET lockcount="+newCount+" WHERE username='"+username+"';");
+            stmt.executeUpdate("UPDATE users SET lockcount='"+newCount+"' WHERE username='"+username+"';");
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
             System.out.println(e);
         }
@@ -115,11 +124,39 @@ public class Database {
     {
         try
         {
-            stmt.executeUpdate("UPDATE users SET password="+newPassword+" WHERE username='"+username+"';");
+            stmt.executeUpdate("UPDATE users SET password='"+newPassword+"' WHERE username='"+username+"';");
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
             System.out.println(e);
         }
     }
+
+    public ArrayList covertResultSet(ResultSet rset)
+	{
+        ArrayList<String[]> r = new ArrayList<String[]>();
+		try {
+	        // -- the metadata tells us how many columns in the data
+			ResultSetMetaData rsmd = rset.getMetaData();
+	        int numberOfColumns = rsmd.getColumnCount();
+	        System.out.println("columns: " + numberOfColumns);
+	        
+	        // -- loop through the ResultSet one row at a time
+	        //    Note that the ResultSet starts at index 1
+	        while (rset.next()) {
+	        	// -- loop through the columns of the ResultSet
+	        	for (int i = 1; i < numberOfColumns; ++i) {
+	        		System.out.print(rset.getString(i) + "\t");
+	        	}
+	        	System.out.println(rset.getString(numberOfColumns));
+	        }
+		}
+		catch (SQLException ex) {
+			// handle any errors
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+        return r;
+	}
 }

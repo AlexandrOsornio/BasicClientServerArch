@@ -47,19 +47,19 @@ public class ServerGUI extends JFrame{
 	JFrame frame;
 
 	Timer T;
-	JButton logOut;
+    JButton logOut;
 	JLabel activeUsers;
 	JLabel registeredUsers;
 	JScrollPane userStatusList;
 	JTextArea output;
 
-	public ServerGUI()
+    public ServerGUI()
 	{
 		// -- construct the base JFrame first
 		super();
 
 		frame = this;
-
+		
 		// -- set the application title
 		this.setTitle("PerfectNumberGui");
 
@@ -85,6 +85,7 @@ public class ServerGUI extends JFrame{
 		panel.setBorder(new EmptyBorder(28, 28, 28, 28));
 
 
+        
 
 		//add the components to the pannel and set their location
 		//-------------------------------------------------------
@@ -116,9 +117,9 @@ public class ServerGUI extends JFrame{
 
 		// -- can make it so the user cannot resize the frame
 		this.setResizable(false);
-
+        
 		// -- show the frame on the screen
-		this.setVisible(true);
+		this.setVisible(true);		
 
 		server.StartServer();
 		T = new Timer(500,new RefreshContent());
@@ -126,30 +127,30 @@ public class ServerGUI extends JFrame{
 	}
 
 	class RefreshContent implements ActionListener
-	{
+    {
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			aUsers = server.getNumOfLoggedInUsers();
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            aUsers = server.getNumOfLoggedInUsers();
 			rUsers = server.getNumOfConnectedClients();
 			userStatusList.removeAll();
-			String [] usernames = server.getUsernamesOfLoggedInUsers();
+			String [] usernames = server.getUsernamesOfConnectedUsers();
 			for(int i = 0; i < usernames.length; i++)
 			{
 				JLabel temp = new JLabel(usernames[i]);
 				userStatusList.add(temp);
 			}
-
+			
 			frame.repaint();
+            
+        }
+        
+    }
+    
 
-		}
-
-	}
-
-
-	public static void main(String [] args)
-	{
-		new ServerGUI();
-	}
-
+    public static void main(String [] args)
+    {
+        new ServerGUI();
+    }
+    
 }

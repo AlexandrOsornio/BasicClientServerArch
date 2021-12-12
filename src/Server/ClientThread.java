@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.ThreadLocalRandom;
 import Database.Database;
-
 import BootCampFiles.EmailManager;
 
 public class ClientThread extends Thread{
@@ -32,7 +31,7 @@ public class ClientThread extends Thread{
 
     public void run(){
         // Sending data
-        pw.println("connected");
+        //pw.println("connected");
         while (true) {
             try {
 
@@ -42,9 +41,13 @@ public class ClientThread extends Thread{
                     if(!command.equals("")){
                         if(command.equals("signup")){
 
+
                             String email = br.readLine();
                             String username = br.readLine();
                             String password = br.readLine();
+                            System.out.println(password);
+
+                            database.addUser(username, password, email);
 
                             database.addUser(username, password, email);
 
@@ -56,14 +59,15 @@ public class ClientThread extends Thread{
 
                         }
                         else if(command.equals("login")){
-                            String username = br.readLine();
+                            String uname = br.readLine();
                             String password = br.readLine();
+                            username = uname;                            
 
 
                             //TODO: Get credentials from database
-                            String p = database.getUserPassword(username);
-
-                            if (password.equals(p))
+                            String str = database.getUserPassword(uname);
+                            System.out.println(str);
+                            if (password.equals(str))
                                 pw.println("loginsuccess");
                             else
                                 pw.println("loginfail");
@@ -82,7 +86,6 @@ public class ClientThread extends Thread{
                             if(newPassword.equals(confirmPassword)){
                                 //TODO: Update database with new passwords
                                 database.updatePassword(username, newPassword);
-
                                 pw.println("changepasssuccess");
                             }
                             else {
@@ -96,10 +99,8 @@ public class ClientThread extends Thread{
                             //TODO: Get user's email from database
                             //TODO: Update password in database
 
-                            String userEmail = "";
-
+                            String userEmail = database.getUserEmail(username);
                             database.updatePassword(username, Integer.toString(newPass));
-
                             em.sendEmail(userEmail, "Account recovery", Integer.toString(newPass));
                         }
                     }

@@ -36,7 +36,10 @@ public class ClientGUI extends JFrame {
     //these will later be initalized inside the methods that define the JPanels
     //they will also be added to the below JPanels
     JTextArea password;
+    JTextArea password2;
+    JTextArea password3;
     JTextArea username;
+    JTextArea username2;
     JLabel p;
     JLabel u;
     JButton submit;
@@ -46,7 +49,10 @@ public class ClientGUI extends JFrame {
     JButton changePasswordButton;
     JButton resetPasswordSubmit;
     JScrollPane pass;
+    JScrollPane pass2;
+    JScrollPane pass3;
     JScrollPane user;
+    JScrollPane user2;
     JTextArea confirm;
     JTextArea email;
     JLabel c;
@@ -55,7 +61,7 @@ public class ClientGUI extends JFrame {
     JScrollPane male;
     JScrollPane contentPane;
     JLabel serverMessages;
-    Timer UpdateClock;
+    //Timer UpdateClock;
     
 
     //create JFrame that will be used as a value to refrence itself
@@ -69,10 +75,10 @@ public class ClientGUI extends JFrame {
     JPanel DisplayContent = loggedIn();
     JPanel newPassword = changePassword();
 
-    public final String IP = "127.0.0.1";
+    public final String IP = "localhost";
     public final int PORT = 2500;
 
-    Client client = new Client(IP,PORT);
+    Client client = new Client();
 
     //constructor for the JFrame
     public ClientGUI()
@@ -109,11 +115,13 @@ public class ClientGUI extends JFrame {
 
         try 
         {
+            System.out.println("1");
             client.connectToServer();
+            System.out.println("2");
         }
         catch (Exception e)
         {
-
+            System.out.println(e);
         }
 	}
 
@@ -136,12 +144,12 @@ public class ClientGUI extends JFrame {
         panel.add(u);
 
 
-        username = new JTextArea("",1, 500);
-        user = new JScrollPane(username);
-        user.setAutoscrolls(true);
-        user.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		user.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(user);
+        username2 = new JTextArea("",1, 500);
+        user2 = new JScrollPane(username2);
+        user2.setAutoscrolls(true);
+        user2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		user2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(user2);
 
         p = new JLabel("password");
 		p.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -193,11 +201,11 @@ public class ClientGUI extends JFrame {
         p = new JLabel("password");
 		p.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        password = new JTextArea("",1, 500);
-        pass = new JScrollPane(password);
-        pass.setAutoscrolls(true);
-        pass.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		pass.setAlignmentX(Component.CENTER_ALIGNMENT);
+        password2 = new JTextArea("",1, 500);
+        pass2 = new JScrollPane(password2);
+        pass2.setAutoscrolls(true);
+        pass2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		pass2.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         submit = new JButton("submit");
 		submit.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -205,6 +213,7 @@ public class ClientGUI extends JFrame {
         
 
         e = new JLabel("email");
+
         email = new JTextArea("",1, 5);
         male = new JScrollPane(email);
         male.setAutoscrolls(true);
@@ -223,7 +232,7 @@ public class ClientGUI extends JFrame {
         panel.add(e);
         panel.add(male);
         panel.add(p);
-        panel.add(pass);
+        panel.add(pass2);
         panel.add(submit);
 
 
@@ -252,18 +261,18 @@ public class ClientGUI extends JFrame {
         p = new JLabel("password");
 		p.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        password = new JTextArea("",1, 500);
-        pass = new JScrollPane(password);
-        pass.setAutoscrolls(true);
-        pass.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		pass.setAlignmentX(Component.CENTER_ALIGNMENT);
+        password3 = new JTextArea("",1, 500);
+        pass3 = new JScrollPane(password3);
+        pass3.setAutoscrolls(true);
+        pass3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		pass3.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         resetPasswordSubmit = new JButton("submit");
         resetPasswordSubmit.addActionListener(new ResetPassword());
         resetPasswordSubmit.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         panel.add(p);
-        panel.add(pass);
+        panel.add(pass3);
         panel.add(c);
         panel.add(con);
         panel.add(resetPasswordSubmit);
@@ -297,8 +306,8 @@ public class ClientGUI extends JFrame {
         contentPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(contentPane);
 
-        UpdateClock = new Timer(500,new RefreshContent());
-        UpdateClock.start();
+        //UpdateClock = new Timer(500,new RefreshContent());
+        //UpdateClock.start();
 
         return panel;
     }
@@ -337,9 +346,9 @@ public class ClientGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try
             {
-                if (authenticateUser(username.getText(), password.getText()))
+                if (authenticateUser(username2.getText(), password.getText()))
                 {
-                    username.setText("");
+                    username2.setText("");
                     password.setText("");
                     frame.add(DisplayContent);
                     DisplayContent.setVisible(true);
@@ -350,7 +359,7 @@ public class ClientGUI extends JFrame {
                 }
                 else
                 {
-                    username.setText("");
+                    username2.setText("");
                     password.setText("");
                 }
             }
@@ -387,9 +396,9 @@ public class ClientGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try 
             {
-                if (resetPassword(password.getText(), confirm.getText()))
+                if (resetPassword(password3.getText(), confirm.getText()))
                 {
-                    password.setText("");
+                    password3.setText("");
                     confirm.setText("");
                     LogInUser.setVisible(true);
                     newPassword.setVisible(false);
@@ -400,7 +409,7 @@ public class ClientGUI extends JFrame {
                 }
                 else
                 {
-                    password.setText("");
+                    password3.setText("");
                     confirm.setText("");
                 }
             }
@@ -442,7 +451,10 @@ public class ClientGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try 
             {
-                if (createNewUser(username.getText(), password.getText(), email.getText()))
+                SignUpUser.repaint();
+                pass.repaint();
+                System.out.println(password2.getText());
+                if (createNewUser(username.getText(), password2.getText(), email.getText()))
                 {
                     username.setText("");
                     password.setText("");
@@ -467,7 +479,7 @@ public class ClientGUI extends JFrame {
         }
         
     }
-
+/*
     class RefreshContent implements ActionListener
     {
 
@@ -485,7 +497,7 @@ public class ClientGUI extends JFrame {
         }
         
     }
-
+*/
 
     //other methods
     //mainly for comunicating with the server
@@ -518,9 +530,10 @@ public class ClientGUI extends JFrame {
         //server attempts to create a new user
         //if it works return true
         //if it does not return false
+        System.out.println(password);
         client.sendMessage("signup\n" + email + "\n" + username + "\n" + password);
         String str = client.fetchDataFromServer();
-        
+        /*
         if(str.equals("signupsuccess"))
         {
             return true;
@@ -529,6 +542,8 @@ public class ClientGUI extends JFrame {
         {
             return false;
         }
+        */
+        return true;
     }
 
     public boolean resetPassword(String password, String confirmPassword) throws IOException
@@ -557,7 +572,7 @@ public class ClientGUI extends JFrame {
         client.sendMessage("logout");
         String str = client.fetchDataFromServer();
     }
-
+/*
     public void updateContent() throws IOException
     {
         client.sendMessage("updatecontent");
@@ -566,7 +581,7 @@ public class ClientGUI extends JFrame {
         DisplayContent.repaint();
         frame.repaint();
     }
-
+*/
 	//main method used to run the client
     public static void main(String [] args)
     {
