@@ -42,15 +42,18 @@ public class Database {
 
     }
 
-    public void addUser(String username, String Password, String email)
+    public void addUser(String user, String pass, String email)
     {
+        System.out.println(pass);
         try
         {
-            stmt.executeUpdate("INSERT INTO users VALUE("+ username + ", '"+password+"', '"+email+"', 0);");
+            System.out.println(pass);
+            stmt.executeUpdate("INSERT INTO users VALUES('"+ user +"', '"+pass+"', '"+email+"', 0)");
+            System.out.println(pass);
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
-
+            System.out.println(e);
         }
     }
 
@@ -59,12 +62,12 @@ public class Database {
         String str = "";
         try
         {
-            ResultSet rs = stmt.executeQuery("select password from users where username='"+username+"'");
-            str = rs.getString(2);
+            ResultSet rs = stmt.executeQuery("SELECT password FROM users WHERE username='"+username+"'");
+            str = rs.getString("password");
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
-
+            System.out.println(e);
         }
         return str;
     }
@@ -77,9 +80,9 @@ public class Database {
             ResultSet rs = stmt.executeQuery("select email from users where username='"+username+"'");
             str = rs.getString(3);
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
-
+            System.out.println(e);
         }
         return str;
     }
@@ -92,9 +95,9 @@ public class Database {
             ResultSet rs = stmt.executeQuery("select password from users where username='"+username+"'");
             lc = rs.getInt(4);
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
-
+            System.out.println(e);
         }
         return lc;
     }
@@ -105,9 +108,9 @@ public class Database {
         {
             stmt.executeUpdate("UPDATE users SET lockcount="+newCount+" WHERE username='"+username+"';");
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
-
+            System.out.println(e);
         }
     }
 
@@ -117,9 +120,9 @@ public class Database {
         {
             stmt.executeUpdate("UPDATE users SET password="+newPassword+" WHERE username='"+username+"';");
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
-
+            System.out.println(e);
         }
     }
 }
