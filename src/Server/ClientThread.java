@@ -49,6 +49,8 @@ public class ClientThread extends Thread{
 
                             database.addUser(username, password, email);
 
+                            database.addUser(username, password, email);
+
                             //TODO: Insert user data into database
                             /*System.out.println("Signup data");
                             System.out.println(email);
@@ -60,6 +62,7 @@ public class ClientThread extends Thread{
                             String uname = br.readLine();
                             String password = br.readLine();
                             username = uname;                            
+
 
                             //TODO: Get credentials from database
                             String str = database.getUserPassword(uname);
@@ -77,6 +80,8 @@ public class ClientThread extends Thread{
 
                             String newPassword = br.readLine();
                             String confirmPassword = br.readLine();
+
+
 
                             if(newPassword.equals(confirmPassword)){
                                 //TODO: Update database with new passwords
