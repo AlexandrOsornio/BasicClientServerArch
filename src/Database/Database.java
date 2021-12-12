@@ -112,7 +112,7 @@ public class Database {
     {
         try
         {
-            stmt.executeUpdate("UPDATE users SET lockcount="+newCount+" WHERE username='"+username+"';");
+            stmt.executeUpdate("UPDATE users SET lockcount='"+newCount+"' WHERE username='"+username+"';");
         }
         catch(SQLException e)
         {
@@ -124,7 +124,7 @@ public class Database {
     {
         try
         {
-            stmt.executeUpdate("UPDATE users SET password="+newPassword+" WHERE username='"+username+"';");
+            stmt.executeUpdate("UPDATE users SET password='"+newPassword+"' WHERE username='"+username+"';");
         }
         catch(SQLException e)
         {
