@@ -133,6 +133,12 @@ public class ServerGUI extends JFrame{
         public void actionPerformed(ActionEvent e) {
             aUsers = server.getNumOfLoggedInUsers();
 			rUsers = server.getNumOfConnectedClients();
+			activeUsers.setText("Logged in users: " + aUsers);
+			registeredUsers.setText("connected users: " + rUsers);
+			activeUsers.repaint();
+			registeredUsers.repaint();
+			frame.repaint();
+
 			userStatusList.removeAll();
 			String [] usernames = server.getUsernamesOfConnectedUsers();
 			for(int i = 0; i < usernames.length; i++)
