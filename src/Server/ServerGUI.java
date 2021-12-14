@@ -121,7 +121,7 @@ public class ServerGUI extends JFrame{
 		// -- show the frame on the screen
 		this.setVisible(true);		
 
-		server.StartServer();
+		server.start();
 		T = new Timer(500,new RefreshContent());
 		T.start();
 	}
@@ -131,7 +131,7 @@ public class ServerGUI extends JFrame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            aUsers = server.getNumOfLoggedInUsers();
+			aUsers = server.getNumOfLoggedInUsers();
 			rUsers = server.getNumOfConnectedClients();
 			activeUsers.setText("Logged in users: " + aUsers);
 			registeredUsers.setText("connected users: " + rUsers);
