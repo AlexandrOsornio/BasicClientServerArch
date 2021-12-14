@@ -85,12 +85,9 @@ public class ClientThread extends Thread{
                             }
                         }
                         else if(command.equals("resetpass")){
-
-                            int newPass = ThreadLocalRandom.current().nextInt(8, 16 + 1);
-
-                            String userEmail = database.getUserEmail(username);
-                            database.updatePassword(username, Integer.toString(newPass));
-                            em.sendEmail(userEmail, "Account recovery", Integer.toString(newPass));
+                            //get username to recover
+                            username = br.readLine();
+                            genNewPass(); // generate and send new password to the user
                         }
                     }
                 }
@@ -174,6 +171,14 @@ public class ClientThread extends Thread{
         }*/
 
         return validUsername;
+    }
+
+    public void genNewPass(){
+        int newPass = ThreadLocalRandom.current().nextInt(10000000, 99999999 + 1);
+
+        String userEmail = database.getUserEmail(username);
+        database.updatePassword(username, Integer.toString(newPass));
+        em.sendEmail(userEmail, "Account recovery","New password: " + Integer.toString(newPass));
     }
 
     public boolean getThreadStatus(){return threadActive;}
