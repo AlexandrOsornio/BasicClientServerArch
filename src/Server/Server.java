@@ -78,10 +78,27 @@ public class Server extends Thread{
     }
     public String[] getLockedOutUsers(){
         //TODO: Get string array from database
-        String[] lockedOutUsers = {"asd", "asdasd"};
+        ArrayList t = new ArrayList<String>();
+        String[] lockedOutUsers = {""};
 
+        String [] users = db.getUserList();
+
+        for (int i = 0; i <users.length; i++)
+        {
+            if (db.getUserLockoutCount(users[i]) >= 3)
+            {
+                t.add(users[i]);
+            }
+        }
+        lockedOutUsers = new String[t.size()];
+        for (int i = 0; i < lockedOutUsers.length; i++)
+        {
+            lockedOutUsers[i] =(String) t.get(i);
+        }
+        
         return lockedOutUsers;
     }
+    
 
     // -- Threaded Methods
     @Override

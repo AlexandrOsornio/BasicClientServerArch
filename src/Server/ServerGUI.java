@@ -54,7 +54,7 @@ public class ServerGUI extends JFrame{
 	JLabel registeredUsers;
 	JScrollPane loggedUserList;
 	JTextArea output;
-	JScrollPane LockoutList;
+	JScrollPane lockoutList;
 	JTextArea lockOutput;
 
 
@@ -116,6 +116,11 @@ public class ServerGUI extends JFrame{
 		loggedUserList.setSize(new Dimension(width,height));
 		panel.add(loggedUserList);
 
+		lockOutput=new JTextArea("",5,5);
+		lockoutList = new JScrollPane(lockOutput);
+		lockoutList.setSize(new Dimension(width,height));
+		panel.add(lockoutList);
+
 		//---------------------------------------------------------
 
 		JPanel space = new JPanel();
@@ -163,6 +168,22 @@ public class ServerGUI extends JFrame{
 			loggedUserList.repaint();
 			frame.repaint();
             
+			lockoutList.removeAll();
+			String [] lockout = server.getLockedOutUsers();
+			String st = "";
+			for(int i = 0; i < usernames.length; i++)
+			{
+				st += usernames[i] + "\n";
+				
+			}
+			lockOutput.setText(str);
+			lockoutList.add(lockOutput);
+			lockoutList.repaint();
+			frame.repaint();
+
+
+
+
         }
         
     }
