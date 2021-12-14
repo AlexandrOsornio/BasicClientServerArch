@@ -50,8 +50,11 @@ public class ServerGUI extends JFrame{
     JButton logOut;
 	JLabel activeUsers;
 	JLabel registeredUsers;
-	JScrollPane userStatusList;
+	JScrollPane loggedUserList;
 	JTextArea output;
+	JScrollPane LockoutList;
+	JTextArea lockOutput;
+
 
     public ServerGUI()
 	{
@@ -103,9 +106,9 @@ public class ServerGUI extends JFrame{
 
 		int width = 10, height = 1;
 		output = new JTextArea("",5,5);
-		userStatusList = new JScrollPane(output);
-		userStatusList.setSize(new Dimension(width,height));
-		panel.add(userStatusList);
+		loggedUserList = new JScrollPane(output);
+		loggedUserList.setSize(new Dimension(width,height));
+		panel.add(loggedUserList);
 
 		//---------------------------------------------------------
 
@@ -139,14 +142,17 @@ public class ServerGUI extends JFrame{
 			registeredUsers.repaint();
 			frame.repaint();
 
-			userStatusList.removeAll();
+			loggedUserList.removeAll();
 			String [] usernames = server.getUsernamesOfConnectedUsers();
+			String str = "";
 			for(int i = 0; i < usernames.length; i++)
 			{
-				JLabel temp = new JLabel(usernames[i]);
-				userStatusList.add(temp);
+				str += usernames[i] + "\n";
+				
 			}
-			
+			output.setText(str);
+			loggedUserList.add(output);
+			loggedUserList.repaint();
 			frame.repaint();
             
         }
