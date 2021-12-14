@@ -97,9 +97,9 @@ public class Database {
         int lc = 0;
         try
         {
-            ResultSet rs = stmt.executeQuery("select password from users where username='"+username+"'");
+            ResultSet rs = stmt.executeQuery("select lockoutCount from users where username='"+username+"'");
             if (rs.next())
-                lc = rs.getInt(4);
+                lc = rs.getInt(1);
         }
         catch(SQLException e)
         {
