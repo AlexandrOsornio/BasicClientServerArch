@@ -11,7 +11,7 @@ public class Server extends Thread{
     private final int portNumber;
     private int numOfConnectedClients;
     private final ArrayList<ClientThread> threadList;
-    //private Database db;
+    private Database db = new Database();
 
     public Server(){
         portNumber = 2500;
@@ -74,8 +74,7 @@ public class Server extends Thread{
     }
     public int getNumOfRegisteredUsers(){
         //TODO: Get string array from database and get its length
-        int numOfRegUsers = 0;
-        return numOfRegUsers;
+        return db.getUserList().length;
     }
     public String[] getLockedOutUsers(){
         //TODO: Get string array from database

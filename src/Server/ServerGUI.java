@@ -37,6 +37,7 @@ import javax.swing.border.EmptyBorder;
 public class ServerGUI extends JFrame{
 
 	public int aUsers = 0;
+	public int cUsers = 0;
 	public int rUsers = 0;
 
 	private final int WIDTH = 500;
@@ -49,6 +50,7 @@ public class ServerGUI extends JFrame{
 	Timer T;
     JButton logOut;
 	JLabel activeUsers;
+	JLabel connectedUsers;
 	JLabel registeredUsers;
 	JScrollPane loggedUserList;
 	JTextArea output;
@@ -96,13 +98,17 @@ public class ServerGUI extends JFrame{
 		logOut.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(logOut);
 
+		registeredUsers = new JLabel("Registered users: " + rUsers);
+		registeredUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel.add(registeredUsers);
+
 		activeUsers = new JLabel("Logged in users: " + aUsers);
 		activeUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(activeUsers);
 
-		registeredUsers = new JLabel("connected users: " + rUsers);
-		registeredUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel.add(registeredUsers);
+		connectedUsers = new JLabel("connected users: " + cUsers);
+		connectedUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel.add(connectedUsers);
 
 		int width = 10, height = 1;
 		output = new JTextArea("",5,5);
@@ -135,11 +141,13 @@ public class ServerGUI extends JFrame{
         @Override
         public void actionPerformed(ActionEvent e) {
 			aUsers = server.getNumOfLoggedInUsers();
-			rUsers = server.getNumOfConnectedClients();
+			cUsers = server.getNumOfConnectedClients();
+			rUsers = server.getNumOfRegisteredUsers();
 			activeUsers.setText("Logged in users: " + aUsers);
-			registeredUsers.setText("connected users: " + rUsers);
+			connectedUsers.setText("connected users: " + cUsers);
+			registeredUsers.setText("Registered users: " + rUsers);
 			activeUsers.repaint();
-			registeredUsers.repaint();
+			connectedUsers.repaint();
 			frame.repaint();
 
 			loggedUserList.removeAll();
