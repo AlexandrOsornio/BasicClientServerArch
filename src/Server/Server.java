@@ -4,21 +4,48 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import Database.Database;
 
-public class Server {
+public class Server extends Thread{
 
     private final int portNumber;
-    private Integer numOfConnectedClients;
-    private ArrayList<ClientThread> threadList;
+    private int numOfConnectedClients;
+    private final ArrayList<ClientThread> threadList;
+    //private Database db;
 
     public Server(){
         portNumber = 2500;
         numOfConnectedClients = 0;
-        threadList = new ArrayList<ClientThread>();
+        threadList = new ArrayList<>();
+        //db = new Database();
     }
 
     public int getNumOfConnectedClients(){
-        return numOfConnectedClients;
+        // -- Method checks ArrayList of connected client threads and
+        // updates params for use in serverGUI
+
+        while(true){
+            int activeThreadCounter = 0;
+
+            for(int i = 0; i<threadList.size(); i++){
+
+                if(threadList.get(i).getThreadStatus())
+                    activeThreadCounter++;
+                else
+                    threadList.remove(i);
+            }
+
+            return activeThreadCounter;
+/*
+
+            try {
+                Thread.sleep(2500);
+            }
+            catch (InterruptedException e){}
+*/
+
+            //System.out.println(numOfConnectedClients);
+        }
     }
     public String[] getUsernamesOfLoggedInUsers(){
         String[] fullList;
@@ -57,7 +84,9 @@ public class Server {
         return lockedOutUsers;
     }
 
-    private void listenForIncomingConnections(){
+    // -- Threaded Methods
+    @Override
+    public void run(){
         // -- Method is constantly running listening for incoming client
         // connections. When a client connects it creates a thread for
         // that individual connection and goes back to listening again
@@ -76,52 +105,27 @@ public class Server {
                 ct.start();
                 // Add thread to list of connected client threads
                 threadList.add(ct);
+                System.out.println("Size after adding: " + threadList.size());
 
                 //serverSocket.close();
             }
         }catch (IOException e){
             System.out.println("[-] Error: Socket error, cannot listen for incoming connections");
         }
-
-
     }
 
-    private void monitorConnectedClientThreads(){
-        // -- Method checks ArrayList of connected client threads and
-        // updates params for use in serverGUI
-
-        while(true){
-            int activeThreadCounter = 0;
-
-            for(int i = 0; i<threadList.size(); i++){
-                if(threadList.get(i).getThreadStatus())
-                    activeThreadCounter++;
-                else
-                    threadList.remove(i);
-            }
-
-            numOfConnectedClients = activeThreadCounter;
-
-            try {
-                Thread.sleep(5000);
-            }
-            catch (InterruptedException e){}
-
-            //System.out.println(numOfConnectedClients);
-        }
-    }
-
-    public void StartServer(){
-        // Create server obj
-        Server server = new Server();
+    /*public void StartServer(){
+        // Create the_server obj
+        Server the_server = new Server();
 
         // Create threads for establishing and monitoring connections
-        Thread connectionsThread = new Thread(() -> server.listenForIncomingConnections());
-        Thread monitorThread = new Thread(() -> server.monitorConnectedClientThreads());
+        Thread connectionsThread = new Thread(the_server::listenForIncomingConnections);
+        Thread monitorThread = new Thread(the_server::monitorConnectedClientThreads);
 
         // Start threads
         connectionsThread.start();
         monitorThread.start();
-    }
+    }*/
 
+    //SchwarzHole637#%
 }
