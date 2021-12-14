@@ -59,13 +59,21 @@ public class ClientThread extends Thread{
                         else if(command.equals("login")){
                             String uname = br.readLine();
                             String password = br.readLine();
-                            username = uname;                            
+                            username = uname;
 
-                            String dbPassword = database.getUserPassword(uname);
-                            if (password.equals(dbPassword))
+                            // Get user data from database
+                            int lockoutCount = database.getUserLockoutCount(username);
+                            String dbPassword = database.getUserPassword(username);
+
+                            if (password.equals(dbPassword) && lockoutCount < 3){
                                 pw.println("loginsuccess");
-                            else
+                                database.updateLockoutCount(username,0); // reset lockout count
+                            }
+                            else{
                                 pw.println("loginfail");
+                                database.updateLockoutCount(username,lockoutCount + 1); // increase lockout count
+                            }
+
                         }
                         else if(command.equals("logout")){
                             terminateConnection();
@@ -79,6 +87,7 @@ public class ClientThread extends Thread{
                             if(newPassword.equals(confirmPassword) && checkPasswordContents(newPassword)){
                                 database.updatePassword(username, newPassword);
                                 pw.println("changepasssuccess");
+                                database.updateLockoutCount(username,0); // reset lockout count
                             }
                             else {
                                 pw.println("changepassfail");
@@ -179,6 +188,8 @@ public class ClientThread extends Thread{
         String userEmail = database.getUserEmail(username);
         database.updatePassword(username, Integer.toString(newPass));
         em.sendEmail(userEmail, "Account recovery","New password: " + Integer.toString(newPass));
+
+        database.updateLockoutCount(username,0); // reset lockout count
     }
 
     public boolean getThreadStatus(){return threadActive;}
