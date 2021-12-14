@@ -2,6 +2,7 @@ package Server;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import Database.Database;
 import BootCampFiles.EmailManager;
@@ -41,21 +42,18 @@ public class ClientThread extends Thread{
                     if(!command.equals("")){
                         if(command.equals("signup")){
 
-
                             String email = br.readLine();
-                            String username = br.readLine();
+                            String uname = br.readLine();
                             String password = br.readLine();
-                            System.out.println(password);
 
-                            database.addUser(username, password, email);
-
-                            database.addUser(username, password, email);
-
-                            //TODO: Insert user data into database
-                            /*System.out.println("Signup data");
-                            System.out.println(email);
-                            System.out.println(username);
-                            System.out.println(password);*/
+                            if(checkEmailFormat(email) && checkUsername(uname) && checkPasswordContents(password))
+                            {
+                                database.addUser(uname, password, email);
+                                pw.println("signupsuccess");
+                            }
+                            else{
+                                pw.println("signupfail");
+                            }
 
                         }
                         else if(command.equals("login")){
@@ -63,11 +61,8 @@ public class ClientThread extends Thread{
                             String password = br.readLine();
                             username = uname;                            
 
-
-                            //TODO: Get credentials from database
-                            String str = database.getUserPassword(uname);
-                            System.out.println(str);
-                            if (password.equals(str))
+                            String dbPassword = database.getUserPassword(uname);
+                            if (password.equals(dbPassword))
                                 pw.println("loginsuccess");
                             else
                                 pw.println("loginfail");
@@ -81,10 +76,7 @@ public class ClientThread extends Thread{
                             String newPassword = br.readLine();
                             String confirmPassword = br.readLine();
 
-
-
-                            if(newPassword.equals(confirmPassword)){
-                                //TODO: Update database with new passwords
+                            if(newPassword.equals(confirmPassword) && checkPasswordContents(newPassword)){
                                 database.updatePassword(username, newPassword);
                                 pw.println("changepasssuccess");
                             }
@@ -95,9 +87,6 @@ public class ClientThread extends Thread{
                         else if(command.equals("resetpass")){
 
                             int newPass = ThreadLocalRandom.current().nextInt(8, 16 + 1);
-
-                            //TODO: Get user's email from database
-                            //TODO: Update password in database
 
                             String userEmail = database.getUserEmail(username);
                             database.updatePassword(username, Integer.toString(newPass));
@@ -124,6 +113,67 @@ public class ClientThread extends Thread{
             socket.close();
         }
         catch (IOException ignore){}
+    }
+
+    public boolean checkEmailFormat(String email) {
+        //is email format valid? If yes return true, if not then return false;
+        boolean validEmailFormat = false;
+        if(email.contains("@")){ //all of the requirements of email format
+            validEmailFormat = true;
+        }
+        return validEmailFormat;
+    }
+
+    public boolean checkPasswordContents(String password) {
+        boolean validPasswordContents = true;
+        if (password.length() < 8 || password.length() > 64) {
+            validPasswordContents = false;
+        } else if (password.contains("\\")){//what a password cannot have in it
+            validPasswordContents = false;
+        } else if (password.contains("\'")){//what a password cannot have in it
+            validPasswordContents = false;
+        } else if (password.contains("`")){//what a password cannot have in it
+            validPasswordContents = false;
+        } else if (password.contains("(")){//what a password cannot have in it
+            validPasswordContents = false;
+        } else if (password.contains(")")){//what a password cannot have in it
+            validPasswordContents = false;
+        }
+        return validPasswordContents;
+    }
+
+    public boolean checkUsername(String username) {
+        boolean validUsername = true;
+        //String possibleUsernameChar = "abcdefghijklmnopqrstuvwxyz1234567890.";
+        //String usernameChar = "";
+        if (username.length() < 3 || username.length() > 64) {
+            validUsername = false;
+            return validUsername;
+        } else if (username.contains("\\")){//what a password cannot have in it
+            validUsername = false;
+        } else if (username.contains("\'")){//what a password cannot have in it
+            validUsername = false;
+        } else if (username.contains("`")){//what a password cannot have in it
+            validUsername = false;
+        } else if (username.contains("(")){//what a password cannot have in it
+            validUsername = false;
+        } else if (username.contains(")")){//what a password cannot have in it
+            validUsername = false;
+        }
+
+        /*for (int i = 0; i < username.length(); i++) { //checks each individual char of username for valid characters
+            if (username.length()-1 > i) {
+                usernameChar = username.substring(i, i+1);
+            } else if (username.length()-1 == i) {
+                usernameChar = username.substring(i);
+            }
+            if (!possibleUsernameChar.contains(usernameChar)) {
+                validUsername = false;
+                return validUsername;
+            }
+        }*/
+
+        return validUsername;
     }
 
     public boolean getThreadStatus(){return threadActive;}
