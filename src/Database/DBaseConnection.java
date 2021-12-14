@@ -1,4 +1,4 @@
-package BootCampFiles;
+package Database;
 
 // -- download MySQL from: http://dev.mysql.com/downloads/
 //    Community Server version
@@ -112,7 +112,6 @@ public class DBaseConnection {
 
 	
 	public static void main(String[] args) {
-
 		Scanner kb = new Scanner(System.in);
 		System.out.print("MySQL username: ");
 		username = kb.next();
