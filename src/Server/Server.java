@@ -94,6 +94,7 @@ public class Server extends Thread{
         for (int i = 0; i < lockedOutUsers.length; i++)
         {
             lockedOutUsers[i] =(String) t.get(i);
+            //System.out.println(lockedOutUsers[i]);
         }
         
         return lockedOutUsers;

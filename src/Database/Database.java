@@ -83,7 +83,7 @@ public class Database {
         {
             ResultSet rs = stmt.executeQuery("select email from users where username='"+username+"'");
             if (rs.next())
-                str = rs.getString(3);
+                str = rs.getString(1);
         }
         catch(SQLException e)
         {

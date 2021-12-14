@@ -171,12 +171,12 @@ public class ServerGUI extends JFrame{
 			lockoutList.removeAll();
 			String [] lockout = server.getLockedOutUsers();
 			String st = "";
-			for(int i = 0; i < usernames.length; i++)
+			for(int i = 0; i < lockout.length; i++)
 			{
-				st += usernames[i] + "\n";
+				st += lockout[i] + "\n";
 				
 			}
-			lockOutput.setText(str);
+			lockOutput.setText(st);
 			lockoutList.add(lockOutput);
 			lockoutList.repaint();
 			frame.repaint();
