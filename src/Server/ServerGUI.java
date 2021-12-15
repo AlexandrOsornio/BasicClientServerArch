@@ -37,6 +37,7 @@ import javax.swing.border.EmptyBorder;
 public class ServerGUI extends JFrame{
 
 	public int aUsers = 0;
+	public int cUsers = 0;
 	public int rUsers = 0;
 
 	private final int WIDTH = 500;
@@ -49,9 +50,13 @@ public class ServerGUI extends JFrame{
 	Timer T;
     JButton logOut;
 	JLabel activeUsers;
+	JLabel connectedUsers;
 	JLabel registeredUsers;
-	JScrollPane userStatusList;
+	JScrollPane loggedUserList;
 	JTextArea output;
+	JScrollPane lockoutList;
+	JTextArea lockOutput;
+
 
     public ServerGUI()
 	{
@@ -93,19 +98,28 @@ public class ServerGUI extends JFrame{
 		logOut.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(logOut);
 
+		registeredUsers = new JLabel("Registered users: " + rUsers);
+		registeredUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel.add(registeredUsers);
+
 		activeUsers = new JLabel("Logged in users: " + aUsers);
 		activeUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(activeUsers);
 
-		registeredUsers = new JLabel("connected users: " + rUsers);
-		registeredUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel.add(registeredUsers);
+		connectedUsers = new JLabel("connected users: " + cUsers);
+		connectedUsers.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel.add(connectedUsers);
 
 		int width = 10, height = 1;
 		output = new JTextArea("",5,5);
-		userStatusList = new JScrollPane(output);
-		userStatusList.setSize(new Dimension(width,height));
-		panel.add(userStatusList);
+		loggedUserList = new JScrollPane(output);
+		loggedUserList.setSize(new Dimension(width,height));
+		panel.add(loggedUserList);
+
+		lockOutput=new JTextArea("",5,5);
+		lockoutList = new JScrollPane(lockOutput);
+		lockoutList.setSize(new Dimension(width,height));
+		panel.add(lockoutList);
 
 		//---------------------------------------------------------
 
@@ -121,7 +135,7 @@ public class ServerGUI extends JFrame{
 		// -- show the frame on the screen
 		this.setVisible(true);		
 
-		server.StartServer();
+		server.start();
 		T = new Timer(500,new RefreshContent());
 		T.start();
 	}
@@ -131,18 +145,45 @@ public class ServerGUI extends JFrame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            aUsers = server.getNumOfLoggedInUsers();
-			rUsers = server.getNumOfConnectedClients();
-			userStatusList.removeAll();
+			aUsers = server.getNumOfLoggedInUsers();
+			cUsers = server.getNumOfConnectedClients();
+			rUsers = server.getNumOfRegisteredUsers();
+			activeUsers.setText("Logged in users: " + aUsers);
+			connectedUsers.setText("connected users: " + cUsers);
+			registeredUsers.setText("Registered users: " + rUsers);
+			activeUsers.repaint();
+			connectedUsers.repaint();
+			frame.repaint();
+
+			loggedUserList.removeAll();
 			String [] usernames = server.getUsernamesOfConnectedUsers();
+			String str = "";
 			for(int i = 0; i < usernames.length; i++)
 			{
-				JLabel temp = new JLabel(usernames[i]);
-				userStatusList.add(temp);
+				str += usernames[i] + "\n";
+				
 			}
-			
+			output.setText(str);
+			loggedUserList.add(output);
+			loggedUserList.repaint();
 			frame.repaint();
             
+			lockoutList.removeAll();
+			String [] lockout = server.getLockedOutUsers();
+			String st = "";
+			for(int i = 0; i < lockout.length; i++)
+			{
+				st += lockout[i] + "\n";
+				
+			}
+			lockOutput.setText(st);
+			lockoutList.add(lockOutput);
+			lockoutList.repaint();
+			frame.repaint();
+
+
+
+
         }
         
     }

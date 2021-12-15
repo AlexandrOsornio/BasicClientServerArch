@@ -59,13 +59,21 @@ public class ClientThread extends Thread{
                         else if(command.equals("login")){
                             String uname = br.readLine();
                             String password = br.readLine();
-                            username = uname;                            
+                            username = uname;
 
-                            String dbPassword = database.getUserPassword(uname);
-                            if (password.equals(dbPassword))
+                            // Get user data from database
+                            int lockoutCount = database.getUserLockoutCount(username);
+                            String dbPassword = database.getUserPassword(username);
+
+                            if (password.equals(dbPassword) && lockoutCount < 3){
                                 pw.println("loginsuccess");
-                            else
+                                database.updateLockoutCount(username,0); // reset lockout count
+                            }
+                            else{
                                 pw.println("loginfail");
+                                database.updateLockoutCount(username,lockoutCount + 1); // increase lockout count
+                            }
+
                         }
                         else if(command.equals("logout")){
                             terminateConnection();
@@ -79,18 +87,16 @@ public class ClientThread extends Thread{
                             if(newPassword.equals(confirmPassword) && checkPasswordContents(newPassword)){
                                 database.updatePassword(username, newPassword);
                                 pw.println("changepasssuccess");
+                                database.updateLockoutCount(username,0); // reset lockout count
                             }
                             else {
                                 pw.println("changepassfail");
                             }
                         }
                         else if(command.equals("resetpass")){
-
-                            int newPass = ThreadLocalRandom.current().nextInt(8, 16 + 1);
-
-                            String userEmail = database.getUserEmail(username);
-                            database.updatePassword(username, Integer.toString(newPass));
-                            em.sendEmail(userEmail, "Account recovery", Integer.toString(newPass));
+                            //get username to recover
+                            String uname = br.readLine();
+                            genNewPass(uname); // generate and send new password to the user
                         }
                     }
                 }
@@ -174,6 +180,18 @@ public class ClientThread extends Thread{
         }*/
 
         return validUsername;
+    }
+
+    public void genNewPass(String uname){
+        int newPass = ThreadLocalRandom.current().nextInt(10000000, 99999999 + 1);
+
+        String userEmail = database.getUserEmail(uname);
+        if(!userEmail.equals("")){
+            database.updatePassword(uname, Integer.toString(newPass));
+            em.sendEmail(userEmail, "Account recovery","New password: " + Integer.toString(newPass));
+
+            database.updateLockoutCount(uname,0); // reset lockout count
+        }
     }
 
     public boolean getThreadStatus(){return threadActive;}

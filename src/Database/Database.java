@@ -83,7 +83,7 @@ public class Database {
         {
             ResultSet rs = stmt.executeQuery("select email from users where username='"+username+"'");
             if (rs.next())
-                str = rs.getString(3);
+                str = rs.getString(1);
         }
         catch(SQLException e)
         {
@@ -97,9 +97,9 @@ public class Database {
         int lc = 0;
         try
         {
-            ResultSet rs = stmt.executeQuery("select password from users where username='"+username+"'");
+            ResultSet rs = stmt.executeQuery("select lockoutCount from users where username='"+username+"'");
             if (rs.next())
-                lc = rs.getInt(4);
+                lc = rs.getInt(1);
         }
         catch(SQLException e)
         {
@@ -130,6 +130,33 @@ public class Database {
         {
             System.out.println(e);
         }
+    }
+
+    public String[] getUserList()
+    {
+        ArrayList R = new ArrayList<String>();
+        
+        try
+        {
+            ResultSet rs =stmt.executeQuery("SELECT username FROM users;");
+            while(rs.next())
+            {
+                R.add(rs.getString(1));
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e);
+        }
+
+        String [] r = new String[R.size()];
+        for (int i = 0; i < r.length; i++)
+        {
+            r[i] = (String)R.get(i);
+        }
+
+        
+        return r;
     }
 
     public ArrayList covertResultSet(ResultSet rset)

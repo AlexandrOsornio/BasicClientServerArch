@@ -48,6 +48,7 @@ public class ClientGUI extends JFrame {
     JButton logOutButton;
     JButton changePasswordButton;
     JButton resetPasswordSubmit;
+    JButton recoverPass;
     JScrollPane pass;
     JScrollPane pass2;
     JScrollPane pass3;
@@ -171,6 +172,10 @@ public class ClientGUI extends JFrame {
 		signUp.setAlignmentX(Component.CENTER_ALIGNMENT);
         signUp.addActionListener(new signUpListener());
         panel.add(signUp);
+        recoverPass = new JButton("recover password");
+        recoverPass.setAlignmentX(Component.CENTER_ALIGNMENT);
+        recoverPass.addActionListener(new newPassord());
+        panel.add(recoverPass);
 
 		//---------------------------------------------------------
 
@@ -418,6 +423,20 @@ public class ClientGUI extends JFrame {
 
             }
             
+        }
+        
+    }
+
+    class newPassord implements ActionListener
+    {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO Auto-generated method stub
+            client.sendMessage("resetpass\n" + username2.getText());
+            password.setText("a new password has been sent to yuor email");
+            LogInUser.repaint();
+            frame.repaint();
         }
         
     }

@@ -11,7 +11,7 @@ public class Server extends Thread{
     private final int portNumber;
     private int numOfConnectedClients;
     private final ArrayList<ClientThread> threadList;
-    //private Database db;
+    private Database db = new Database();
 
     public Server(){
         portNumber = 2500;
@@ -74,15 +74,32 @@ public class Server extends Thread{
     }
     public int getNumOfRegisteredUsers(){
         //TODO: Get string array from database and get its length
-        int numOfRegUsers = 0;
-        return numOfRegUsers;
+        return db.getUserList().length;
     }
     public String[] getLockedOutUsers(){
         //TODO: Get string array from database
-        String[] lockedOutUsers = {"asd", "asdasd"};
+        ArrayList t = new ArrayList<String>();
+        String[] lockedOutUsers = {""};
 
+        String [] users = db.getUserList();
+
+        for (int i = 0; i <users.length; i++)
+        {
+            if (db.getUserLockoutCount(users[i]) >= 3)
+            {
+                t.add(users[i]);
+            }
+        }
+        lockedOutUsers = new String[t.size()];
+        for (int i = 0; i < lockedOutUsers.length; i++)
+        {
+            lockedOutUsers[i] =(String) t.get(i);
+            //System.out.println(lockedOutUsers[i]);
+        }
+        
         return lockedOutUsers;
     }
+    
 
     // -- Threaded Methods
     @Override
