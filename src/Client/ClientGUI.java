@@ -91,7 +91,7 @@ public class ClientGUI extends JFrame {
         frame = this;
 		
 		// -- set the application title
-		this.setTitle("PerfectNumberGui");
+		this.setTitle("Client Console");
 				
 		// -- initial size of the frame: width, height
 		this.setSize(WIDTH, HEIGHT);

@@ -66,7 +66,7 @@ public class ServerGUI extends JFrame{
 		frame = this;
 		
 		// -- set the application title
-		this.setTitle("PerfectNumberGui");
+		this.setTitle("Server Console");
 
 		// -- initial size of the frame: width, height
 		this.setSize(WIDTH, HEIGHT);
@@ -111,11 +111,17 @@ public class ServerGUI extends JFrame{
 		panel.add(connectedUsers);
 
 		int width = 10, height = 1;
+		JLabel coleman2 = new JLabel("logged in users");
+		coleman2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel.add(coleman2);
 		output = new JTextArea("",5,5);
 		loggedUserList = new JScrollPane(output);
 		loggedUserList.setSize(new Dimension(width,height));
 		panel.add(loggedUserList);
 
+		JLabel coleman = new JLabel("locked out users");
+		coleman.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel.add(coleman);
 		lockOutput=new JTextArea("",5,5);
 		lockoutList = new JScrollPane(lockOutput);
 		lockoutList.setSize(new Dimension(width,height));
